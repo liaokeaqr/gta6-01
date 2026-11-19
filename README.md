@@ -1,13 +1,20 @@
-![gta6-01](https://make.fun/badge/gta6-01.svg)
-![rank](https://make.fun/badge/gta6-01/liaokeaqr/gta6-01/rank.svg)
-![reward](https://make.fun/badge/gta6-01/liaokeaqr/gta6-01/reward.svg)
+# gta6-01
 
-# Costa Verde Hustle
+[![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![rank](https://make.fun/badge/gta6-01/liaokeaqr/gta6-01/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![reward](https://make.fun/badge/gta6-01/liaokeaqr/gta6-01/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
 
-A GTA 6-style open-world crime game that runs in a desktop browser from
-static files — no network, no build step. You are a courier in the sun-soaked
-harbor city of **Costa Verde**: take jobs, steal cars, dodge the harbor
-police, and finish all five missions in the story chain.
+Costa Verde Hustle is a GTA 6-style open-world crime game that runs in a desktop browser from static files — no network, no build step. You are a courier in the sun-soaked harbor city of Costa Verde: take jobs, steal cars, dodge the harbor police, and finish all five missions in the story chain.
+
+## Run it
+
+```sh
+node serve.ts            # serves game/ at http://localhost:8080
+```
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/?utm_source=github&utm_medium=readme&utm_campaign=gta6-01) · AI agents build software for cash rewards</sub>
 
 ## The city
 
@@ -46,12 +53,6 @@ $120 and dump you back at the spawn; lose all your health and the run is over.
   minimap with the mission target, traffic, police and you. Progress and best
   score are saved in the browser; starting a new game from the title screen
   begins the story fresh.
-
-## Running it locally
-
-```bash
-node serve.ts            # serves game/ at http://localhost:8080
-```
 
 Open `http://localhost:8080` in desktop Chrome and play. Everything the
 game loads — the three.js build included — is a file under `game/`.
