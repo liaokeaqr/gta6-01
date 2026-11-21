@@ -10,6 +10,7 @@ import * as THREE from 'three';
 import { CAMERA, CITY, COLORS } from './config.js';
 
 export const SCREEN_TITLE = 'title';
+export const SCREEN_INTRO = 'intro';
 export const SCREEN_PLAY = 'play';
 export const SCREEN_PAUSED = 'paused';
 export const SCREEN_OVER = 'over';
@@ -430,9 +431,9 @@ export function createRenderer(canvas) {
 
     // Camera: third-person follow, pulled back and higher in a car, closer on foot.
     // Shot scenes get a fixed cinematic angle: high enough to read the city, the
-    // player and the beacon in one frame. Title gets a slow orbit of the city.
+    // player and the beacon in one frame. Title and intro get a slow orbit of the city.
     const heading = p.heading || 0;
-    if (screen === SCREEN_TITLE && !shot) {
+    if ((screen === SCREEN_TITLE || screen === SCREEN_INTRO) && !shot) {
       const a = time * 0.08;
       camPos.set(Math.sin(a) * 150, 75, Math.cos(a) * 150);
       camTarget.set(0, 0, 0);
@@ -460,7 +461,7 @@ export function createRenderer(canvas) {
       camPos.set(p.x - fx * dist, height, p.z - fz * dist);
       camTarget.set(p.x + fx * CAM_LOOK_AHEAD, 1.6, p.z + fz * CAM_LOOK_AHEAD);
     }
-    camera.position.lerp(camPos, screen === SCREEN_TITLE && !shot ? 0.02 : 0.14);
+    camera.position.lerp(camPos, (screen === SCREEN_TITLE || screen === SCREEN_INTRO) && !shot ? 0.02 : 0.14);
     camera.lookAt(camTarget);
     renderer.render(scene, camera);
 
@@ -524,6 +525,11 @@ export function createRenderer(canvas) {
         + `<p style="margin:6px 0;font-size:17px;">A courier, a borrowed car, and the whole harbor city.</p>`
         + `<p style="margin:6px 0;font-size:15px;color:#cfe0f0;">WASD drive &amp; walk · Shift boost · Space handbrake<br>E enter / steal a car · F attack · P pause · M mute</p>`
         + `<p style="margin:10px 0 0;font-size:15px;color:#ffd94d;">Best score ${best}</p>`
+        + `<p style="margin:14px 0 0;font-size:18px;">Press Enter or click to start</p>`);
+    } else if (screen === SCREEN_INTRO) {
+      setPanel(`<h1 style="margin:0 0 10px;font-size:34px;">COSTA VERDE — 6 AM</h1>`
+        + `<p style="margin:6px 0;font-size:17px;">First day on the harbor crew. The dispatcher hands you the keys to a borrowed car and one rule: keep the cargo moving, stay out of trouble.</p>`
+        + `<p style="margin:6px 0;font-size:17px;">Dana is waiting at the north docks with the first package. Go get her — and bring her home safe.</p>`
         + `<p style="margin:14px 0 0;font-size:18px;">Press Enter or click to start</p>`);
     } else if (screen === SCREEN_PAUSED) {
       setPanel('<h1 style="margin:0 0 8px;font-size:36px;">Paused</h1><p style="font-size:16px;">The city waits for you.</p><p style="font-size:16px;">Press P to keep driving</p>');

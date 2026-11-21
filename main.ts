@@ -7,6 +7,13 @@
 // make.fun library. Put 3 or 4 PNG or JPEG screenshots in screenshots/ (the
 // first by name is the cover) and run it.
 //
+// v2 opening: a new game opens on a prologue card ("COSTA VERDE — 6 AM",
+// first day on the harbor crew, Dana waiting at the north docks), then a
+// first mission, "Dana's Back", that picks Dana up at the docks and brings
+// her to the safehouse before the old five-mission chain starts. The
+// opening mission carries step-by-step prompts; the rest of the game is
+// unchanged.
+//
 // Serve it locally with `node serve.ts`, then open http://localhost:8080.
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts

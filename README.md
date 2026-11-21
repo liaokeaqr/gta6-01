@@ -4,7 +4,7 @@
 [![rank](https://make.fun/badge/gta6-01/liaokeaqr/gta6-01/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
 [![reward](https://make.fun/badge/gta6-01/liaokeaqr/gta6-01/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
 
-Costa Verde Hustle is a GTA 6-style open-world crime game that runs in a desktop browser from static files — no network, no build step. You are a courier in the sun-soaked harbor city of Costa Verde: take jobs, steal cars, dodge the harbor police, and finish all five missions in the story chain.
+Costa Verde Hustle is a GTA 6-style open-world crime game that runs in a desktop browser from static files — no network, no build step. You are a courier in the sun-soaked harbor city of Costa Verde: take jobs, steal cars, dodge the harbor police, and finish all six missions in the story chain. A new game opens with a prologue card — COSTA VERDE, 6 AM, your first day on the harbor crew — then a first job: pick Dana up at the north docks and bring her home.
 
 ## Run it
 
@@ -23,8 +23,10 @@ lamps and trees, built fresh from a seed every run. Traffic drives the roads,
 pedestrians walk the sidewalks, and the harbor police answer your wanted
 level with one cop per star, up to five stars.
 
-## The story — five missions
+## The story — six missions
 
+0. **Dana's Back** — pick Dana up at the north docks and drive her to the
+   safehouse. ($100)
 1. **First Drop** — deliver a parcel to the north docks. ($150)
 2. **Fare Game** — pick up a tourist at the plaza and drive them to the beach
    hotel. ($200)
@@ -35,7 +37,7 @@ level with one cop per star, up to five stars.
 5. **The Last Package** — one last run to the lighthouse at the south point.
    ($500)
 
-Finish all five and Costa Verde is yours. Get busted and the police fine you
+Finish all six and Costa Verde is yours. Get busted and the police fine you
 $120 and dump you back at the spawn; lose all your health and the run is over.
 
 ## Playing

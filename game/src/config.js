@@ -92,6 +92,13 @@ export const MISSIONS = {
   /** Story chain: each entry is one mission, in order. */
   story: [
     {
+      id: 'm0',
+      type: 'taxi',
+      title: "Dana's Back",
+      text: 'Dana just got out. Pick her up at the north docks and bring her to the safehouse.',
+      reward: 100,
+    },
+    {
       id: 'm1',
       type: 'delivery',
       title: 'First Drop',

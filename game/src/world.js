@@ -4,7 +4,7 @@
 //
 // The world is an x/z plane with y as height. The city is a grid of blocks
 // separated by roads; traffic drives the roads, pedestrians walk the
-// sidewalks, police chase the player, and a five-mission story chain pays
+// sidewalks, police chase the player, and a six-mission story chain pays
 // cash. step() advances one fixed step and returns what happened as bit
 // flags, so the caller can react without the world knowing about screens
 // or sound.
@@ -347,6 +347,8 @@ export function createWorld(random, options = {}) {
   function missionTarget(m, s) {
     if (m.type === 'delivery' && m.id === 'm1') return { x: s.docks.x, z: s.docks.z };
     if (m.type === 'delivery') return { x: s.lighthouse.x, z: s.lighthouse.z };
+    // Taxi pickup: m0 collects Dana at the docks, every other fare waits at the plaza.
+    if (m.type === 'taxi' && m.id === 'm0') return { x: s.docks.x, z: s.docks.z };
     if (m.type === 'taxi') return { x: s.plaza.x, z: s.plaza.z };
     if (m.type === 'vigilante') return { x: s.market.x, z: s.market.z };
     if (m.type === 'escape') return { x: s.safehouse.x, z: s.safehouse.z };
@@ -864,7 +866,11 @@ function stepMissions(state, dt, random) {
     if (mission.phase === 0) {
       if (dist2(p.x, p.z, mission.target.x, mission.target.z) < MISSIONS.arriveRadius * MISSIONS.arriveRadius) {
         mission.phase = 1;
-        mission.target = { x: state.spots.beachHotel.x, z: state.spots.beachHotel.z };
+        // Dropoff: Dana goes home to the safehouse; every other fare goes to the beach hotel.
+        mission.target =
+          mission.id === 'm0'
+            ? { x: state.spots.safehouse.x, z: state.spots.safehouse.z }
+            : { x: state.spots.beachHotel.x, z: state.spots.beachHotel.z };
         events |= EVENT_PICKUP;
       }
       return events;

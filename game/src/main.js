@@ -1,7 +1,8 @@
 // Boot and the one loop: input is read every frame, the world advances in fixed
 // 1/60 s steps (several in a slow frame, none in a fast one), and the renderer
-// paints what is there. The game moves between five screens:
-// title, play, paused, game over and win.
+// paints what is there. The game moves between six screens:
+// title, intro, play, paused, game over and win. A new game opens on the
+// intro card (the 6 AM prologue) and only starts playing once it is dismissed.
 //
 // A bust is not game over: the police fine the player and dump them back at
 // the spawn, and play goes on. Only health hitting zero (EVENT_OVER) ends a
@@ -26,7 +27,7 @@ import {
   step,
 } from './world.js';
 import { ACTION_ATTACK, ACTION_CONFIRM, ACTION_MUTE, ACTION_PAUSE, createInput } from './input.js';
-import { createRenderer, SCREEN_OVER, SCREEN_PAUSED, SCREEN_PLAY, SCREEN_TITLE, SCREEN_WIN } from './render.js';
+import { createRenderer, SCREEN_INTRO, SCREEN_OVER, SCREEN_PAUSED, SCREEN_PLAY, SCREEN_TITLE, SCREEN_WIN } from './render.js';
 import { createAudio } from './audio.js';
 import { stageShot } from './shots.js';
 
@@ -95,13 +96,25 @@ function runGame() {
     // A fresh world: a new seed, a new city, and a fresh mission chain.
     // The save is ignored here on purpose: winning once must not leave every
     // later "new game" with the story already done (only idle browsing).
+    // Play does not start yet: the prologue card comes first, and the first
+    // job only begins once the player dismisses it.
     seed = Math.floor(Math.random() * 4294967296);
     world = createWorld(createRandom(seed), { fresh: true });
     accumulator = 0;
-    screen = SCREEN_PLAY;
+    screen = SCREEN_INTRO;
     audio.resume();
     audio.play('click');
-    announce('Playing. Take the courier job, and stay ahead of the harbor police.');
+    announce('COSTA VERDE, 6 AM. First day on the harbor crew. Dana is waiting at the north docks.');
+  }
+
+  function beginPlay() {
+    // The prologue is dismissed: the opening job starts, with its first
+    // step spelled out on screen. A fresh world always opens on m0, so
+    // this prompt is always the right one here.
+    screen = SCREEN_PLAY;
+    audio.play('click');
+    renderer.flash('Drive to the north docks — pick up Dana');
+    announce('Playing. Drive to the north docks and pick up Dana.');
   }
 
   function endGame(won) {
@@ -139,6 +152,7 @@ function runGame() {
     if (actions & ACTION_CONFIRM) {
       pendingActions &= ~ACTION_CONFIRM;
       if (screen === SCREEN_TITLE || screen === SCREEN_OVER || screen === SCREEN_WIN) startGame();
+      else if (screen === SCREEN_INTRO) beginPlay();
       else if (screen === SCREEN_PAUSED) {
         screen = SCREEN_PLAY;
         announce('Playing.');
@@ -158,17 +172,25 @@ function runGame() {
   }
 
   function stepOnce() {
-    if (screen === SCREEN_TITLE) {
-      // Living backdrop: the city idles with no input while the title is up.
+    if (screen === SCREEN_TITLE || screen === SCREEN_INTRO) {
+      // Living backdrop: the city idles with no input while the title or the
+      // prologue card is up.
       step(world, STEP, null, 0);
       return;
     }
     const vec = input.keyVector ? input.keyVector() : null;
     const actions = pendingActions;
     pendingActions = 0;
+    // Which mission was active before this step: the guided prompts for the
+    // opening job (m0) are keyed on it, so a later taxi pickup or delivery
+    // never flashes the opening lines.
+    const beforeId = world.missions ? world.missions.activeId : null;
     const events = step(world, STEP, vec, actions) || 0;
     if (world.best > best) best = world.best;
-    if (events & EVENT_PICKUP) audio.play('pickup');
+    if (events & EVENT_PICKUP) {
+      audio.play('pickup');
+      if (beforeId === 'm0') renderer.flash("Dana's in. Drive her to the safehouse.");
+    }
     if (events & EVENT_DELIVER) audio.play('deliver');
     if (events & EVENT_HIT) {
       audio.play('hit');
@@ -179,7 +201,8 @@ function runGame() {
       announce(`Wanted level ${world.player.wanted}. The police are coming.`);
     }
     if (events & EVENT_MISSION_DONE) {
-      renderer.flash('Job done! Cash in.');
+      if (beforeId === 'm0') renderer.flash('Welcome to Costa Verde.');
+      else renderer.flash('Job done! Cash in.');
       announce('Job done. Cash in.');
     }
     if (events & EVENT_BUSTED) {
@@ -196,8 +219,8 @@ function runGame() {
     accumulator += Math.min((now - last) / 1000, MAX_FRAME);
     last = now;
     handleActions();
-    if (screen === SCREEN_TITLE || screen === SCREEN_PLAY) {
-      while (accumulator >= STEP && (screen === SCREEN_TITLE || screen === SCREEN_PLAY)) {
+    if (screen === SCREEN_TITLE || screen === SCREEN_INTRO || screen === SCREEN_PLAY) {
+      while (accumulator >= STEP && (screen === SCREEN_TITLE || screen === SCREEN_INTRO || screen === SCREEN_PLAY)) {
         stepOnce();
         accumulator -= STEP;
       }
